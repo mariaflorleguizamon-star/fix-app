@@ -2369,6 +2369,16 @@ export default function Fixa(){
           </div>
         </div>
       </div>
+      {/* FAB chatbot desktop */}
+      {!chatOpen&&(
+        <div style={{position:"fixed",bottom:32,right:32,zIndex:200}}>
+          <div style={{position:"absolute",inset:-4,borderRadius:"50%",border:"1.5px solid rgba(91,74,196,.35)",animationName:"ripple",animationDuration:"2.4s",animationTimingFunction:"ease-out",animationIterationCount:"infinite"}}/>
+          <button onClick={()=>setChatOpen(true)} style={{width:52,height:52,borderRadius:"50%",background:"linear-gradient(135deg,#1E1060,#4332B0)",border:"none",boxShadow:"0 4px 18px rgba(30,16,96,.5)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",zIndex:1,overflow:"hidden"}}>
+            <Personaje size={56} color="lav" mood="eyes" style={{marginTop:8}}/>
+          </button>
+        </div>
+      )}
+      {chatOpen&&<Chatbot ud={ud} onClose={()=>setChatOpen(false)}/>}
       <div style={{position:"fixed",bottom:24,left:"50%",transform:"translateX(-50%)",zIndex:9999,pointerEvents:"none"}}>
         <div style={{background:C.ink,color:"#fff",padding:"11px 22px",borderRadius:100,fontSize:13,fontWeight:600,opacity:toast.on?1:0,transition:"opacity .3s",whiteSpace:"nowrap"}}>{toast.msg}</div>
       </div>
@@ -2378,34 +2388,32 @@ export default function Fixa(){
   return(
     <div style={{width:"100%",height:"100vh",background:"radial-gradient(circle at 30% 20%,#241B4D 0%,#15102E 55%,#0D0920 100%)",display:"flex",alignItems:"center",justifyContent:"center"}}>
       <style>{`html,body,#root{margin:0;padding:0;width:100%;height:100%;}`}</style>
-      <div style={{width:"100%",height:"100vh",maxHeight:932,background:C.bg,position:"relative",overflow:"hidden",fontFamily:"DM Sans,sans-serif",maxWidth:430,boxShadow:"0 30px 90px rgba(0,0,0,.45)",borderRadius:0}}>
+      <div style={{width:"100%",height:"100vh",maxHeight:isDesktop?undefined:932,background:isDesktop?"transparent":C.bg,position:"relative",overflow:isDesktop?"visible":"hidden",fontFamily:"DM Sans,sans-serif",maxWidth:isDesktop?undefined:430,boxShadow:isDesktop?"none":"0 30px 90px rgba(0,0,0,.45)",borderRadius:0,display:isDesktop?"flex":undefined,alignItems:isDesktop?"center":undefined,justifyContent:isDesktop?"center":undefined}}>
       <style>{css}</style>
 
       <AchievementToast a={ach}/>
 
-      {/* Orbs */}
-      <div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"hidden",zIndex:0}}>
+      {!isDesktop&&<div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"hidden",zIndex:0}}>
         <div style={{position:"absolute",width:500,height:500,borderRadius:"50%",background:"radial-gradient(circle,rgba(139,124,232,.14) 0%,transparent 70%)",top:-150,right:-100,animationName:"pulse",animationDuration:"20s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite"}}/>
         <div style={{position:"absolute",width:360,height:360,borderRadius:"50%",background:"radial-gradient(circle,rgba(200,224,58,.1) 0%,transparent 70%)",bottom:-90,left:-70,animationName:"pulse",animationDuration:"15s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite",animationDelay:"6s"}}/>
-      </div>
+      </div>}
 
       {/* SPLASH */}
       {screen==="splash"&&(
-        <div style={{position:"absolute",inset:0,zIndex:10,background:"radial-gradient(ellipse at 50% 30%,#2A1880 0%,#0E0828 60%,#06041A 100%)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 32px"}}>
-          <div style={{position:"absolute",width:280,height:280,borderRadius:"50%",background:"radial-gradient(circle,rgba(91,74,196,.4) 0%,transparent 70%)",top:"12%",left:"50%",transform:"translateX(-50%)",pointerEvents:"none"}}/>
-          <div style={{position:"absolute",width:180,height:180,borderRadius:"50%",background:"radial-gradient(circle,rgba(200,224,58,.1) 0%,transparent 70%)",bottom:"18%",right:"10%",pointerEvents:"none"}}/>
-          <div style={{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",position:"relative",zIndex:1,width:"100%"}}>
+        <div style={{position:isDesktop?"relative":"absolute",inset:isDesktop?undefined:0,zIndex:10,background:"radial-gradient(ellipse at 50% 30%,#2A1880 0%,#0E0828 60%,#06041A 100%)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 32px",width:isDesktop?"100%":undefined,height:isDesktop?"100vh":undefined}}>
+          <div style={{position:"absolute",width:400,height:400,borderRadius:"50%",background:"radial-gradient(circle,rgba(91,74,196,.4) 0%,transparent 70%)",top:"10%",left:"50%",transform:"translateX(-50%)",pointerEvents:"none"}}/>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",position:"relative",zIndex:1,width:"100%",maxWidth:420}}>
             <div style={{animationName:"pgBob",animationDuration:"3.6s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite",marginBottom:-8}}>
-              <Personaje size={200} color="lav" mood="idle"/>
+              <Personaje size={isDesktop?240:200} color="lav" mood="idle"/>
             </div>
             <div style={{animation:"fadeUp .7s cubic-bezier(.34,1.2,.64,1) .3s both"}}>
-              <LogoFixa height={36} dark/>
+              <LogoFixa height={isDesktop?44:36} dark/>
             </div>
-            <div style={{fontSize:14,color:"rgba(255,255,255,.38)",maxWidth:240,lineHeight:1.7,animation:"fadeUp .6s ease .55s both",marginTop:10}}>
+            <div style={{fontSize:isDesktop?16:14,color:"rgba(255,255,255,.38)",maxWidth:280,lineHeight:1.7,animation:"fadeUp .6s ease .55s both",marginTop:12}}>
               Marketing inmobiliario en 2 minutos al día.
             </div>
-            <div style={{marginTop:32,animation:"fadeUp .6s ease .8s both",width:"100%"}}>
-              <Btn v="lime" onClick={()=>setScreen("login")} sx={{padding:"14px 0",fontSize:15,width:"100%",borderRadius:18,background:C.lime,color:C.ink,boxShadow:"0 6px 24px rgba(200,224,58,.35)"}}>Empezar →</Btn>
+            <div style={{marginTop:36,animation:"fadeUp .6s ease .8s both",width:"100%"}}>
+              <Btn v="lime" onClick={()=>setScreen("login")} sx={{padding:"15px 0",fontSize:16,width:"100%",borderRadius:18,background:C.lime,color:C.ink,boxShadow:"0 6px 24px rgba(200,224,58,.35)"}}>Empezar →</Btn>
             </div>
           </div>
         </div>
@@ -2413,64 +2421,61 @@ export default function Fixa(){
 
       {/* LOGIN */}
       {screen==="login"&&(
-        <div style={{position:"absolute",inset:0,zIndex:10}}>
-          <Login onDone={()=>setScreen("onboarding")}/>
+        <div style={{position:isDesktop?"relative":"absolute",inset:isDesktop?undefined:0,zIndex:10,width:isDesktop?"100%":undefined,height:isDesktop?"100vh":undefined,display:isDesktop?"flex":undefined,alignItems:isDesktop?"center":undefined,justifyContent:isDesktop?"center":undefined}}>
+          <div style={{width:isDesktop?"100%":undefined,maxWidth:isDesktop?440:undefined}}>
+            <Login onDone={()=>setScreen("onboarding")}/>
+          </div>
         </div>
       )}
 
       {/* ONBOARDING */}
       {screen==="onboarding"&&(
-        <div style={{position:"absolute",inset:0,zIndex:10}}>
-          <Onboarding onDone={(data)=>{setUd(data);setScreen("plan");}}/>
+        <div style={{position:isDesktop?"relative":"absolute",inset:isDesktop?undefined:0,zIndex:10,width:isDesktop?"100%":undefined,height:isDesktop?"100vh":undefined,display:isDesktop?"flex":undefined,alignItems:isDesktop?"center":undefined,justifyContent:isDesktop?"center":undefined,overflowY:isDesktop?"auto":undefined}}>
+          <div style={{width:isDesktop?"100%":undefined,maxWidth:isDesktop?520:undefined,padding:isDesktop?"40px 0":undefined}}>
+            <Onboarding onDone={(data)=>{setUd(data);setScreen("plan");}}/>
+          </div>
         </div>
       )}
 
       {/* PLAN */}
       {screen==="plan"&&(
-        <div style={{position:"absolute",inset:0,zIndex:10}}>
-          <Plan role={ud.role} onDone={()=>{if(ud.role==="inmobiliaria")setPanel("empresa");setScreen("scan");}}/>
+        <div style={{position:isDesktop?"relative":"absolute",inset:isDesktop?undefined:0,zIndex:10,width:isDesktop?"100%":undefined,height:isDesktop?"100vh":undefined,display:isDesktop?"flex":undefined,alignItems:isDesktop?"center":undefined,justifyContent:isDesktop?"center":undefined}}>
+          <div style={{width:isDesktop?"100%":undefined,maxWidth:isDesktop?480:undefined}}>
+            <Plan role={ud.role} onDone={()=>{if(ud.role==="inmobiliaria")setPanel("empresa");setScreen("scan");}}/>
+          </div>
         </div>
       )}
 
       {/* SCAN */}
       {screen==="scan"&&(
-        <div style={{position:"absolute",inset:0,zIndex:10}}>
-          <Scan zona={ud.zona} onDone={()=>setScreen("app")}/>
+        <div style={{position:isDesktop?"relative":"absolute",inset:isDesktop?undefined:0,zIndex:10,width:isDesktop?"100%":undefined,height:isDesktop?"100vh":undefined,display:isDesktop?"flex":undefined,alignItems:isDesktop?"center":undefined,justifyContent:isDesktop?"center":undefined}}>
+          <div style={{width:isDesktop?"100%":undefined,maxWidth:isDesktop?420:undefined}}>
+            <Scan zona={ud.zona} onDone={()=>setScreen("app")}/>
+          </div>
         </div>
       )}
 
-      {/* APP */}
-      {screen==="app"&&(
+      {/* APP MOBILE — solo si no es desktop */}
+      {screen==="app"&&!isDesktop&&(
         <div style={{position:"absolute",inset:0,zIndex:10,display:"flex",flexDirection:"column"}}>
           {/* Topbar */}
           <div style={{height:64,background:"rgba(255,255,255,.98)",backdropFilter:"blur(32px)",borderBottom:"1px solid "+C.brd,display:"flex",alignItems:"center",padding:"0 16px",gap:10,flexShrink:0,zIndex:40}}>
-            {/* Avatar: inicial del usuario, click a perfil */}
             <div onClick={()=>setPanel("perfil")} style={{width:36,height:36,borderRadius:"50%",background:"linear-gradient(135deg,#3D2AAF,#6B5DD3)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,boxShadow:"0 2px 8px rgba(91,74,196,.35)"}}>
               <span style={{color:"#fff",fontWeight:800,fontSize:15,letterSpacing:-0.5}}>{ud.nombre?ud.nombre[0].toUpperCase():"U"}</span>
             </div>
-            {/* Logo */}
-            <div style={{flexShrink:0}}>
-              <LogoFixa height={19}/>
-            </div>
-            {/* Saludo + nombre */}
+            <div style={{flexShrink:0}}><LogoFixa height={19}/></div>
             <div onClick={()=>setPanel("perfil")} style={{flex:1,minWidth:0,cursor:"pointer"}}>
-              <div style={{fontSize:9.5,color:C.muted,lineHeight:1,fontWeight:500,letterSpacing:"0.02em"}}>{greet}</div>
+              <div style={{fontSize:9.5,color:C.muted,lineHeight:1,fontWeight:500}}>{greet}</div>
               <div style={{fontSize:13,fontWeight:700,letterSpacing:-0.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",color:C.ink,marginTop:1.5}}>{ud.nombre}</div>
             </div>
-            {/* Racha */}
             <div style={{display:"flex",alignItems:"center",gap:5,background:C.sund,borderRadius:100,padding:"5px 10px",fontSize:12,fontWeight:800,color:C.amber,flexShrink:0}}>
               <span style={{animationName:"streakFlame",animationDuration:"2s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite",display:"inline-block"}}>🔥</span> {streak}
             </div>
-            {/* Trial badge */}
             <div onClick={()=>setPanel("perfil")} style={{fontSize:9,fontWeight:800,letterSpacing:"0.06em",textTransform:"uppercase",padding:"5px 10px",borderRadius:100,background:C.limed,color:C.lime3,flexShrink:0,cursor:"pointer",border:"1.5px solid rgba(143,168,32,.2)"}}>Trial</div>
-            {/* Notificaciones */}
             <div onClick={()=>setPanel("alertas")} style={{width:32,height:32,borderRadius:"50%",background:C.s2,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,position:"relative",flexShrink:0,border:"1px solid "+C.brd}}>
-              🔔
-              <div style={{position:"absolute",top:2,right:2,width:7,height:7,borderRadius:"50%",background:C.red,border:"2px solid white"}}/>
+              🔔<div style={{position:"absolute",top:2,right:2,width:7,height:7,borderRadius:"50%",background:C.red,border:"2px solid white"}}/>
             </div>
           </div>
-
-          {/* Content */}
           <div style={{flex:1,overflowY:"auto",padding:"18px 16px",paddingBottom:120}}>
             {panel==="dash"&&<PanelDash ud={ud} toast={showToast} setPanel={setPanel} streak={streak} fireAch={fireAch}/>}
             {panel==="hoy"&&<PanelHoy ud={ud} toast={showToast} markPublished={markPublished}/>}
@@ -2487,37 +2492,31 @@ export default function Fixa(){
             {panel==="biblioteca"&&<PanelBiblioteca ud={ud} toast={showToast}/>}
             {panel==="perfil"&&<PanelPerfil ud={ud} setUd={setUd} toast={showToast} isManager={isManager} onLogout={()=>{setScreen("splash");setPanel("dash");}}/>}
           </div>
-
-          {/* Nav */}
           <div style={{position:"absolute",bottom:0,left:0,right:0,height:74,background:"rgba(255,255,255,.98)",backdropFilter:"blur(28px)",borderTop:"1px solid "+C.brd,zIndex:40,overflowX:"auto",display:"flex",alignItems:"center",padding:"0 6px",gap:0}}>
             {navItems.map(item=>(
-              <div key={item.id} onClick={()=>changePanel(item.id)} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",flexShrink:0,minWidth:58,padding:"8px 4px",borderRadius:16,position:"relative",background:panel===item.id?C.lav4:"transparent",transition:"all .2s cubic-bezier(.34,1.2,.64,1)",animationName:tabBounce===item.id?"tabPop":"none",animationDuration:".4s",animationTimingFunction:"cubic-bezier(.34,1.56,.64,1)"}}>
-                <div style={{width:26,height:26,display:"flex",alignItems:"center",justifyContent:"center",color:panel===item.id?C.lav3:C.muted,transition:"color .2s"}}>{item.ic}</div>
-                <div style={{fontSize:9,fontWeight:panel===item.id?700:500,color:panel===item.id?C.lav3:C.muted,whiteSpace:"nowrap",letterSpacing:"-0.01em"}}>{item.lbl}</div>
-                {item.pro&&<div style={{position:"absolute",top:4,right:"calc(50% - 24px)",fontSize:7,fontWeight:800,background:C.lime,color:C.ink,padding:"1px 4px",borderRadius:5,letterSpacing:"0.04em"}}>PRO</div>}
+              <div key={item.id} onClick={()=>changePanel(item.id)} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",flexShrink:0,minWidth:58,padding:"8px 4px",borderRadius:16,position:"relative",background:panel===item.id?C.lav4:"transparent",transition:"all .2s",animationName:tabBounce===item.id?"tabPop":"none",animationDuration:".4s",animationTimingFunction:"cubic-bezier(.34,1.56,.64,1)"}}>
+                <div style={{width:26,height:26,display:"flex",alignItems:"center",justifyContent:"center",color:panel===item.id?C.lav3:C.muted}}>{item.ic}</div>
+                <div style={{fontSize:9,fontWeight:panel===item.id?700:500,color:panel===item.id?C.lav3:C.muted,whiteSpace:"nowrap"}}>{item.lbl}</div>
+                {item.pro&&<div style={{position:"absolute",top:4,right:"calc(50% - 24px)",fontSize:7,fontWeight:800,background:C.lime,color:C.ink,padding:"1px 4px",borderRadius:5}}>PRO</div>}
                 {item.badge&&<div style={{position:"absolute",top:5,right:"calc(50% - 20px)",width:8,height:8,borderRadius:"50%",background:C.red,border:"2px solid white"}}/>}
-                {item.new&&<div style={{position:"absolute",top:4,right:"calc(50% - 28px)",fontSize:7,fontWeight:800,background:C.sky,color:"#fff",padding:"1px 5px",borderRadius:5,letterSpacing:"0.04em"}}>NEW</div>}
+                {item.new&&<div style={{position:"absolute",top:4,right:"calc(50% - 28px)",fontSize:7,fontWeight:800,background:C.sky,color:"#fff",padding:"1px 5px",borderRadius:5}}>NEW</div>}
               </div>
             ))}
           </div>
-
-          {/* FAB CHATBOT — solo visible en inicio, esquina discreta */}
           {panel==="dash"&&!chatOpen&&(
-          <div style={{position:"absolute",bottom:84,right:14,zIndex:50}}>
-            <div style={{position:"absolute",inset:-4,borderRadius:"50%",border:"1.5px solid rgba(91,74,196,.4)",animationName:"ripple",animationDuration:"2.4s",animationTimingFunction:"ease-out",animationIterationCount:"infinite"}}/>
-            <button onClick={()=>setChatOpen(true)} style={{width:48,height:48,borderRadius:"50%",background:"linear-gradient(135deg,#1E1060,#4332B0)",border:"none",boxShadow:"0 4px 16px rgba(30,16,96,.5)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",zIndex:1,overflow:"hidden"}}>
-              <Personaje size={52} color="lav" mood="eyes" style={{marginTop:7}}/>
-            </button>
-          </div>
+            <div style={{position:"absolute",bottom:84,right:14,zIndex:50}}>
+              <div style={{position:"absolute",inset:-4,borderRadius:"50%",border:"1.5px solid rgba(91,74,196,.4)",animationName:"ripple",animationDuration:"2.4s",animationTimingFunction:"ease-out",animationIterationCount:"infinite"}}/>
+              <button onClick={()=>setChatOpen(true)} style={{width:48,height:48,borderRadius:"50%",background:"linear-gradient(135deg,#1E1060,#4332B0)",border:"none",boxShadow:"0 4px 16px rgba(30,16,96,.5)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",position:"relative",zIndex:1,overflow:"hidden"}}>
+                <Personaje size={52} color="lav" mood="eyes" style={{marginTop:7}}/>
+              </button>
+            </div>
           )}
         </div>
       )}
 
-      {/* CHATBOT MODAL */}
       {chatOpen&&<Chatbot ud={ud} onClose={()=>setChatOpen(false)}/>}
 
-      {/* Toast */}
-      <div style={{position:"fixed",bottom:82,left:"50%",transform:"translateX(-50%) translateY("+(toast.on?"0":"20px")+")",background:C.ink,color:"#fff",padding:"10px 20px",borderRadius:100,fontSize:13,fontWeight:500,zIndex:9999,opacity:toast.on?1:0,transition:"all .3s cubic-bezier(.34,1.4,.64,1)",whiteSpace:"nowrap",pointerEvents:"none"}}>
+      <div style={{position:"fixed",bottom:isDesktop?24:82,left:"50%",transform:"translateX(-50%) translateY("+(toast.on?"0":"20px")+")",background:C.ink,color:"#fff",padding:"10px 20px",borderRadius:100,fontSize:13,fontWeight:500,zIndex:9999,opacity:toast.on?1:0,transition:"all .3s",whiteSpace:"nowrap",pointerEvents:"none"}}>
         {toast.msg}
       </div>
       </div>
