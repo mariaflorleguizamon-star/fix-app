@@ -2174,25 +2174,25 @@ const Login=({onDone})=>{
     </div>
   );
   if(isD) return(
-    <div style={{width:"100vw",height:"100vh",display:"flex",background:"radial-gradient(ellipse at 40% 40%,#2A1880 0%,#0E0828 100%)"}}>
-      {/* Izquierda — formulario */}
-      <div style={{width:480,display:"flex",alignItems:"center",justifyContent:"center",padding:48,background:"rgba(255,255,255,.97)",borderRight:"1px solid rgba(255,255,255,.08)"}}>
+    <div style={{width:"100vw",height:"100vh",display:"grid",gridTemplateColumns:"1fr 1fr",background:"radial-gradient(ellipse at 60% 40%,#2A1880 0%,#0E0828 100%)"}}>
+      {/* Izquierda — formulario sobre fondo blanco */}
+      <div style={{background:"rgba(255,255,255,.97)",display:"flex",alignItems:"center",justifyContent:"center",padding:"48px 64px"}}>
         {form}
       </div>
-      {/* Derecha — personaje + tagline */}
-      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:24,padding:48}}>
+      {/* Derecha — personaje + tagline sobre fondo oscuro */}
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:28,padding:48}}>
         <div style={{animationName:"pgBob",animationDuration:"3.6s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite"}}>
-          <Personaje size={260} color="lav" mood="idle"/>
+          <Personaje size={240} color="lav" mood="idle"/>
         </div>
         <div style={{textAlign:"center"}}>
-          <div style={{fontSize:28,fontWeight:800,color:"#fff",letterSpacing:-1,marginBottom:10}}>Marketing inmobiliario<br/>que realmente funciona.</div>
+          <div style={{fontSize:30,fontWeight:800,color:"#fff",letterSpacing:-1,lineHeight:1.2,marginBottom:12}}>Marketing inmobiliario<br/>que realmente funciona.</div>
           <div style={{fontSize:15,color:"rgba(255,255,255,.45)",lineHeight:1.7}}>Ideas, captions, análisis de competencia<br/>y pipeline de ventas — todo en un lugar.</div>
         </div>
-        <div style={{display:"flex",gap:32,marginTop:8}}>
+        <div style={{display:"flex",gap:40}}>
           {[["2min","por día"],["10x","más leads"],["100%","argento"]].map(([n,l])=>(
             <div key={n} style={{textAlign:"center"}}>
-              <div style={{fontSize:22,fontWeight:800,color:C.lime}}>{n}</div>
-              <div style={{fontSize:11,color:"rgba(255,255,255,.4)",marginTop:2}}>{l}</div>
+              <div style={{fontSize:24,fontWeight:800,color:C.lime}}>{n}</div>
+              <div style={{fontSize:12,color:"rgba(255,255,255,.4)",marginTop:3}}>{l}</div>
             </div>
           ))}
         </div>
