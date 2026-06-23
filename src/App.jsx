@@ -467,7 +467,7 @@ const Onboarding=({onDone})=>{
 
   return(
     <div style={{minHeight:"100vh",overflowY:"auto",padding:isD?"40px 20px":"24px 20px",background:isD?"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)":"transparent",fontFamily:"DM Sans,sans-serif",display:isD?"flex":undefined,alignItems:isD?"flex-start":undefined,justifyContent:isD?"center":undefined}}>
-      <div style={{width:"100%",maxWidth:isD?560:420,margin:"0 auto",background:isD?"rgba(255,255,255,.97)":C.bg,borderRadius:isD?24:0,padding:isD?"40px 48px":"0",boxShadow:isD?"0 24px 80px rgba(0,0,0,.25)":undefined}}>
+      <div style={{width:"100%",maxWidth:isD?560:420,margin:"0 auto",background:isD?"rgba(255,255,255,.97)":"transparent",borderRadius:isD?24:0,padding:isD?"40px 48px":"0",boxShadow:isD?"0 24px 80px rgba(0,0,0,.25)":undefined}}>
         <div style={{display:"flex",gap:5,marginBottom:28}}>
           {Array.from({length:totalSteps},(_,i)=>i+1).map(p=><div key={p} style={{height:4,borderRadius:4,background:p<step?C.lav3:p===step?C.lav:C.brd,flex:p===step?2:1,transition:"all .4s"}}/>)}
         </div>
@@ -2265,9 +2265,16 @@ export default function Fixa(){
   const [published,setPublished]=useState(false);
   const [streak,setStreak]=useState(7);
   const [chatOpen,setChatOpen]=useState(false);
+  const [isDesktop,setIsDesktop]=useState(window.innerWidth>=768);
   const [toast,showToast]=useToast();
   const [ach,fireAch]=useAchievement();
   const [tabBounce,setTabBounce]=useState(null);
+
+  useEffect(()=>{
+    const h=()=>setIsDesktop(window.innerWidth>=768);
+    window.addEventListener('resize',h);
+    return ()=>window.removeEventListener('resize',h);
+  },[]);
 
   const markPublished=()=>{setPublished(true);setStreak(s=>s+1);fireAch("¡Publicado! Racha "+(streak+1)+" días",C.lime3);};
   const changePanel=(id)=>{
@@ -2295,13 +2302,6 @@ export default function Fixa(){
   const isManager = ud.role==="inmobiliaria";
   const managerOrder=["empresa","reservas","comp"];
   const navItems = isManager ? [...managerOrder.map(id=>navItemsAll.find(i=>i.id===id)),...navItemsAll.filter(i=>!managerOrder.includes(i.id))] : navItemsAll;
-
-  const [isDesktop,setIsDesktop]=useState(window.innerWidth>=768);
-  useEffect(()=>{
-    const h=()=>setIsDesktop(window.innerWidth>=768);
-    window.addEventListener('resize',h);
-    return ()=>window.removeEventListener('resize',h);
-  },[]);
 
   if(isDesktop && screen==="app") return(
     <div style={{width:"100vw",height:"100vh",background:"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)",display:"flex",flexDirection:"column",fontFamily:"DM Sans,sans-serif",overflow:"hidden"}}>
