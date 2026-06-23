@@ -2176,7 +2176,7 @@ const Login=({onDone})=>{
   if(isD) return(
     <div style={{width:"100vw",height:"100vh",display:"flex",background:"radial-gradient(ellipse at 40% 40%,#2A1880 0%,#0E0828 100%)"}}>
       {/* Izquierda — formulario */}
-      <div style={{width:480,display:"flex",alignItems:"center",justifyContent:"center",padding:48,background:"rgba(255,255,255,.04)",backdropFilter:"blur(20px)",borderRight:"1px solid rgba(255,255,255,.08)"}}>
+      <div style={{width:480,display:"flex",alignItems:"center",justifyContent:"center",padding:48,background:"rgba(255,255,255,.97)",borderRight:"1px solid rgba(255,255,255,.08)"}}>
         {form}
       </div>
       {/* Derecha — personaje + tagline */}
