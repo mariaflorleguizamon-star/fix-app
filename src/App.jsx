@@ -2175,7 +2175,11 @@ const Login=({onDone})=>{
   );
   if(isD) return(
     <div style={{width:"100vw",height:"100vh",display:"flex",background:"radial-gradient(ellipse at 40% 40%,#2A1880 0%,#0E0828 100%)"}}>
-      {/* Izquierda — personaje + tagline */}
+      {/* Izquierda — formulario */}
+      <div style={{width:480,display:"flex",alignItems:"center",justifyContent:"center",padding:48,background:"rgba(255,255,255,.04)",backdropFilter:"blur(20px)",borderRight:"1px solid rgba(255,255,255,.08)"}}>
+        {form}
+      </div>
+      {/* Derecha — personaje + tagline */}
       <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:24,padding:48}}>
         <div style={{animationName:"pgBob",animationDuration:"3.6s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite"}}>
           <Personaje size={260} color="lav" mood="idle"/>
@@ -2192,10 +2196,6 @@ const Login=({onDone})=>{
             </div>
           ))}
         </div>
-      </div>
-      {/* Derecha — formulario */}
-      <div style={{width:480,display:"flex",alignItems:"center",justifyContent:"center",padding:48,background:"rgba(255,255,255,.04)",backdropFilter:"blur(20px)",borderLeft:"1px solid rgba(255,255,255,.08)"}}>
-        {form}
       </div>
     </div>
   );
