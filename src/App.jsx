@@ -2259,6 +2259,122 @@ export default function Fixa(){
   const managerOrder=["empresa","reservas","comp"];
   const navItems = isManager ? [...managerOrder.map(id=>navItemsAll.find(i=>i.id===id)),...navItemsAll.filter(i=>!managerOrder.includes(i.id))] : navItemsAll;
 
+  const [isDesktop,setIsDesktop]=useState(window.innerWidth>=768);
+  useEffect(()=>{
+    const h=()=>setIsDesktop(window.innerWidth>=768);
+    window.addEventListener('resize',h);
+    return ()=>window.removeEventListener('resize',h);
+  },[]);
+
+  if(isDesktop && screen==="app") return(
+    <div style={{width:"100vw",height:"100vh",background:"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)",display:"flex",flexDirection:"column",fontFamily:"DM Sans,sans-serif",overflow:"hidden"}}>
+      <style>{`html,body,#root{margin:0;padding:0;width:100%;height:100%;} ${css}`}</style>
+      <AchievementToast a={ach}/>{ach.on&&<Confetti/>}
+      {/* TOPBAR */}
+      <div style={{height:60,background:"rgba(255,255,255,.97)",backdropFilter:"blur(32px)",borderBottom:"1px solid "+C.brd,display:"flex",alignItems:"center",padding:"0 28px",gap:16,flexShrink:0,zIndex:100}}>
+        <LogoFixa height={18}/>
+        <div style={{width:1,height:22,background:C.brd}}/>
+        <div style={{fontSize:13,color:C.mid,fontWeight:500}}>{greet}, <strong style={{color:C.ink}}>{ud.nombre}</strong></div>
+        <div style={{flex:1}}/>
+        <div style={{display:"flex",alignItems:"center",gap:8,background:C.s2,borderRadius:100,padding:"7px 16px",border:"1px solid "+C.brd,width:220}}>
+          <span style={{fontSize:13,opacity:.4}}>🔍</span>
+          <input placeholder="Buscar..." style={{border:"none",background:"transparent",fontSize:13,color:C.ink,outline:"none",fontFamily:"DM Sans,sans-serif",width:"100%"}}/>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:6,background:C.sund,borderRadius:100,padding:"5px 12px",fontSize:12,fontWeight:800,color:C.amber}}>🔥 {streak}</div>
+        <div style={{fontSize:9,fontWeight:800,padding:"5px 10px",borderRadius:100,background:C.limed,color:C.lime3,border:"1px solid rgba(143,168,32,.2)"}}>TRIAL</div>
+        <div onClick={()=>changePanel("alertas")} style={{width:32,height:32,borderRadius:"50%",background:C.s2,border:"1px solid "+C.brd,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:13,position:"relative"}}>
+          🔔<div style={{position:"absolute",top:2,right:2,width:7,height:7,borderRadius:"50%",background:C.red,border:"2px solid white"}}/>
+        </div>
+        <div onClick={()=>changePanel("perfil")} style={{width:34,height:34,borderRadius:"50%",background:"linear-gradient(135deg,#3D2AAF,#6B5DD3)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
+          <span style={{color:"#fff",fontWeight:800,fontSize:14}}>{ud.nombre?ud.nombre[0].toUpperCase():"U"}</span>
+        </div>
+      </div>
+      {/* BODY */}
+      <div style={{flex:1,display:"grid",gridTemplateColumns:"220px 1fr 280px",overflow:"hidden"}}>
+        {/* SIDEBAR */}
+        <div style={{background:"rgba(255,255,255,.55)",backdropFilter:"blur(20px)",borderRight:"1px solid "+C.brd,padding:"16px 10px",display:"flex",flexDirection:"column",gap:2,overflowY:"auto"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",marginBottom:8,background:C.lav4,borderRadius:14}}>
+            <Personaje size={34} color="lav" mood="eyes"/>
+            <div><div style={{fontSize:11,fontWeight:700,color:C.lav3}}>fixa. assistant</div><div style={{fontSize:10,color:C.mid}}>Siempre disponible</div></div>
+          </div>
+          {navItems.map(item=>(
+            <div key={item.id} onClick={()=>changePanel(item.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 12px",borderRadius:12,cursor:"pointer",background:panel===item.id?C.lav4:"transparent",color:panel===item.id?C.lav3:C.mid,transition:"all .15s",fontWeight:panel===item.id?700:500}}>
+              <div style={{color:panel===item.id?C.lav3:C.muted,flexShrink:0}}>{item.ic}</div>
+              <div style={{fontSize:13,flex:1}}>{item.lbl}</div>
+              {item.pro&&<div style={{fontSize:8,fontWeight:800,background:C.lime,color:C.ink,padding:"2px 5px",borderRadius:4}}>PRO</div>}
+              {item.badge&&<div style={{width:7,height:7,borderRadius:"50%",background:C.red,flexShrink:0}}/>}
+              {item.new&&<div style={{fontSize:8,fontWeight:800,background:C.sky,color:"#fff",padding:"2px 5px",borderRadius:4}}>NEW</div>}
+            </div>
+          ))}
+          <div style={{marginTop:"auto",padding:"12px",background:C.limed,borderRadius:14,border:"1px solid rgba(143,168,32,.2)"}}>
+            <div style={{fontSize:11,fontWeight:700,color:C.lime3,marginBottom:2}}>Trial · 14 días</div>
+            <div style={{fontSize:10,color:C.mid,lineHeight:1.5,marginBottom:8}}>Upgrade para acceso completo</div>
+            <div onClick={()=>changePanel("perfil")} style={{background:C.lav3,color:"#fff",borderRadius:8,padding:"7px",textAlign:"center",fontSize:11,fontWeight:700,cursor:"pointer"}}>Upgradear →</div>
+          </div>
+        </div>
+        {/* CONTENT */}
+        <div style={{overflowY:"auto",padding:"28px 32px",background:C.bg}}>
+          <div style={{marginBottom:22}}>
+            <div style={{fontSize:26,fontWeight:800,letterSpacing:-0.8,color:C.ink}}>{{"dash":"Inicio","hoy":"Publicar hoy","ideas":"Ideas del mes","cal":"Calendario","comp":"Competencia","reservas":"Reservas","editor":"Diseño","guión":"Guión de reel","auto":"Bot Pro","alertas":"Alertas","biblioteca":"Biblioteca de Ads","empresa":"Equipo","perfil":"Mi perfil"}[panel]||panel}</div>
+            <div style={{fontSize:13,color:C.mid,marginTop:4}}>{{"dash":"Tu resumen de hoy","hoy":"Mejor horario: 18-19hs","ideas":"Junio · Para "+ud.zona,"comp":ud.zona+" · Actualizado hace 3h","reservas":"Tu pipeline personal","biblioteca":"Meta Ads Library · Real estate","editor":"Plantillas editables"}[panel]||""}</div>
+          </div>
+          {panel==="dash"&&<PanelDash ud={ud} toast={showToast} setPanel={changePanel} streak={streak} fireAch={fireAch}/>}
+          {panel==="hoy"&&<PanelHoy ud={ud} toast={showToast} markPublished={markPublished}/>}
+          {panel==="ideas"&&<PanelIdeas ud={ud} toast={showToast} setPanel={changePanel}/>}
+          {panel==="cal"&&<PanelCal toast={showToast} published={published} fireAch={fireAch}/>}
+          {panel==="comp"&&<PanelComp ud={ud} toast={showToast} fireAch={fireAch}/>}
+          {panel==="reservas"&&<PanelReservas toast={showToast} fireAch={fireAch} ud={ud} isManager={isManager} setPanel={changePanel}/>}
+          {panel==="editor"&&<PanelEditor toast={showToast}/>}
+          {panel==="guión"&&<PanelGuion ud={ud} toast={showToast} fireAch={fireAch}/>}
+          {panel==="auto"&&<PanelBot ud={ud} toast={showToast}/>}
+          {panel==="alertas"&&<PanelAlertas toast={showToast} setPanel={changePanel}/>}
+          {panel==="biblioteca"&&<PanelBiblioteca ud={ud} toast={showToast}/>}
+          {panel==="empresa"&&<PanelEmpresa toast={showToast}/>}
+          {panel==="perfil"&&<PanelPerfil ud={ud} setUd={setUd} toast={showToast} onLogout={()=>setScreen("login")} isManager={isManager}/>}
+        </div>
+        {/* RIGHT PANEL */}
+        <div style={{background:"rgba(255,255,255,.45)",backdropFilter:"blur(20px)",borderLeft:"1px solid "+C.brd,padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
+          <div style={{background:C.sf,borderRadius:16,padding:"16px",border:"1px solid "+C.brd}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+              <div style={{width:42,height:42,borderRadius:"50%",background:"linear-gradient(135deg,#3D2AAF,#6B5DD3)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontWeight:800,fontSize:17}}>{ud.nombre?ud.nombre[0].toUpperCase():"U"}</span></div>
+              <div><div style={{fontSize:13,fontWeight:700,color:C.ink}}>{ud.nombre}</div><div style={{fontSize:11,color:C.mid}}>{ud.ig} · {ud.zona}</div></div>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>
+              {[[streak+"🔥",C.amber,C.sund],["Trial",C.lav3,C.lav4],["Pro",C.green,C.greend]].map(([v,c,bg])=>(
+                <div key={v} style={{background:bg,borderRadius:10,padding:"8px 6px",textAlign:"center"}}>
+                  <div style={{fontSize:13,fontWeight:800,color:c}}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{background:C.peachd,borderRadius:14,padding:"13px 14px",border:"1px solid rgba(176,88,32,.15)"}}>
+            <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.peachk,marginBottom:6}}>⚠️ Alerta</div>
+            <div style={{fontSize:12,color:C.mid,lineHeight:1.55}}><strong style={{color:C.peachk}}>@propiedades.palermo</strong> publicó 3 reels. Engagement +41%.</div>
+            <div onClick={()=>changePanel("comp")} style={{marginTop:8,fontSize:11,fontWeight:700,color:C.peachk,cursor:"pointer"}}>Ver análisis →</div>
+          </div>
+          <div style={{background:C.sf,borderRadius:14,padding:"14px",border:"1px solid "+C.brd,flex:1}}>
+            <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.muted,marginBottom:10}}>Próximos posts</div>
+            {[{d:"13 Jun",t:"Tour de la zona",tipo:"Reel",c:"#B04020",bg:C.redd},{d:"17 Jun",t:"Datos de barrio",tipo:"Post",c:C.lav3,bg:C.lav4},{d:"20 Jun",t:"Mitos escritura",tipo:"Reel",c:"#B04020",bg:C.redd}].map((p,i)=>(
+              <div key={i} style={{display:"flex",gap:8,alignItems:"center",padding:"8px 0",borderBottom:i<2?"1px solid "+C.brd:"none"}}>
+                <div style={{fontSize:10,color:C.muted,width:36}}>{p.d}</div>
+                <div style={{flex:1,fontSize:12,fontWeight:600,color:C.ink}}>{p.t}</div>
+                <div style={{fontSize:9,fontWeight:700,padding:"3px 7px",borderRadius:6,background:p.bg,color:p.c}}>{p.tipo}</div>
+              </div>
+            ))}
+          </div>
+          <div onClick={()=>showToast("Abriendo plan Pro...")} style={{background:"linear-gradient(135deg,"+C.lav3+","+C.lav+")",borderRadius:14,padding:"14px 16px",cursor:"pointer"}}>
+            <div style={{fontSize:13,fontWeight:800,color:"#fff",marginBottom:2}}>⚡ Activá el Bot</div>
+            <div style={{fontSize:11,color:"rgba(255,255,255,.65)",lineHeight:1.5}}>Comentarios → leads automáticamente.</div>
+            <div style={{marginTop:8,fontSize:11,fontWeight:700,color:C.lime}}>Agregar a mi plan →</div>
+          </div>
+        </div>
+      </div>
+      <div style={{position:"fixed",bottom:24,left:"50%",transform:"translateX(-50%)",zIndex:9999,pointerEvents:"none"}}>
+        <div style={{background:C.ink,color:"#fff",padding:"11px 22px",borderRadius:100,fontSize:13,fontWeight:600,opacity:toast.on?1:0,transition:"opacity .3s",whiteSpace:"nowrap"}}>{toast.msg}</div>
+      </div>
+    </div>
+  );
+
   return(
     <div style={{width:"100%",height:"100vh",background:"radial-gradient(circle at 30% 20%,#241B4D 0%,#15102E 55%,#0D0920 100%)",display:"flex",alignItems:"center",justifyContent:"center"}}>
       <style>{`html,body,#root{margin:0;padding:0;width:100%;height:100%;}`}</style>
