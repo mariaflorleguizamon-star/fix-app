@@ -463,9 +463,11 @@ const Onboarding=({onDone})=>{
   ];
   const totalSteps=isManager?2:4;
 
+  const isD=window.innerWidth>=768;
+
   return(
-    <div style={{height:"100%",overflowY:"auto",padding:"24px 20px",background:C.bg,fontFamily:"DM Sans,sans-serif"}}>
-      <div style={{maxWidth:420,margin:"0 auto"}}>
+    <div style={{minHeight:"100vh",overflowY:"auto",padding:isD?"40px 20px":"24px 20px",background:isD?"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)":"transparent",fontFamily:"DM Sans,sans-serif",display:isD?"flex":undefined,alignItems:isD?"flex-start":undefined,justifyContent:isD?"center":undefined}}>
+      <div style={{width:"100%",maxWidth:isD?560:420,margin:"0 auto",background:isD?"rgba(255,255,255,.97)":C.bg,borderRadius:isD?24:0,padding:isD?"40px 48px":"0",boxShadow:isD?"0 24px 80px rgba(0,0,0,.25)":undefined}}>
         <div style={{display:"flex",gap:5,marginBottom:28}}>
           {Array.from({length:totalSteps},(_,i)=>i+1).map(p=><div key={p} style={{height:4,borderRadius:4,background:p<step?C.lav3:p===step?C.lav:C.brd,flex:p===step?2:1,transition:"all .4s"}}/>)}
         </div>
@@ -601,7 +603,8 @@ const Scan=({zona,onDone})=>{
     return()=>clearInterval(iv);
   },[]);
   return(
-    <div style={{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",padding:"28px 20px",height:"100%",justifyContent:"center",gap:14,background:"radial-gradient(circle at 50% 20%,#2D1F8F 0%,#15102E 50%,#0D0920 100%)",fontFamily:"DM Sans,sans-serif"}}>
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",padding:"28px 20px",minHeight:"100vh",justifyContent:"center",gap:14,background:"radial-gradient(circle at 50% 20%,#2D1F8F 0%,#15102E 50%,#0D0920 100%)",fontFamily:"DM Sans,sans-serif"}}>
+      <div style={{width:"100%",maxWidth:480,display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
       <div style={{animationName:"bob",animationDuration:"3s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite"}}>
         <Personaje size={100} color="lav" mood="thinking"/>
       </div>
@@ -632,6 +635,7 @@ const Scan=({zona,onDone})=>{
         <div style={{width:"100%",height:6,background:C.s3,borderRadius:6,overflow:"hidden"}}>
           <div style={{height:"100%",width:prog+"%",borderRadius:6,background:"linear-gradient(90deg,"+C.lav3+","+C.lav+")",transition:"width .5s cubic-bezier(.4,0,.2,1)"}}/>
         </div>
+      </div>
       </div>
     </div>
   );
@@ -2152,20 +2156,52 @@ function PanelPerfil({ud,setUd,toast,onLogout,isManager}){
 // ── LOGIN ─────────────────────────────────────────────────────────────────────────
 const Login=({onDone})=>{
   const [loading,setLoading]=useState(false);
+  const isD=window.innerWidth>=768;
   const go=()=>{setLoading(true);setTimeout(()=>onDone(),1100);};
-  return(
-    <div style={{height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,background:C.bg,textAlign:"center"}}>
-      <div style={{marginBottom:14,display:"flex",justifyContent:"center",animation:"fadeUp .6s ease both"}}><Personaje size={150} color="lav" mood="idle"/></div>
-      <div style={{display:"flex",justifyContent:"center",marginBottom:10,animation:"fadeUp .6s ease .15s both"}}><LogoFixa height={30}/></div>
-      <div style={{fontSize:14,color:C.mid,marginBottom:38,maxWidth:260,lineHeight:1.6,animation:"fadeUp .6s ease .3s both"}}>Tu estrategia de marketing inmobiliario, en 2 minutos al día.</div>
-      <div style={{width:"100%",maxWidth:300,display:"flex",flexDirection:"column",gap:10,animation:"fadeUp .6s ease .45s both"}}>
-        <button onClick={go} disabled={loading} style={{width:"100%",padding:"13px 16px",borderRadius:100,border:"2px solid "+C.brd,background:C.sf,display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:loading?"default":"pointer",fontFamily:"DM Sans,sans-serif"}}>
+  const form=(
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:isD?"48px 56px":"40px",background:isD?"rgba(255,255,255,.97)":"transparent",borderRadius:isD?24:0,boxShadow:isD?"0 20px 60px rgba(0,0,0,.12)":undefined,width:isD?"100%":undefined,maxWidth:isD?420:undefined,textAlign:"center"}}>
+      {!isD&&<div style={{marginBottom:14,display:"flex",justifyContent:"center"}}><Personaje size={140} color="lav" mood="idle"/></div>}
+      <div style={{display:"flex",justifyContent:"center",marginBottom:10}}><LogoFixa height={isD?32:30}/></div>
+      <div style={{fontSize:isD?16:14,color:C.mid,marginBottom:38,maxWidth:280,lineHeight:1.6}}>Tu estrategia de marketing inmobiliario, en 2 minutos al día.</div>
+      <div style={{width:"100%",maxWidth:320,display:"flex",flexDirection:"column",gap:10}}>
+        <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"2px solid "+C.brd,background:C.sf,display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:loading?"default":"pointer",fontFamily:"DM Sans,sans-serif"}}>
           {loading?<Dots/>:<><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4c-7.5 0-13.9 4.3-17.1 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.3-1.8 13.7-5l-6.3-5.3C29.5 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4 5.7l6.3 5.3C40.9 36.9 44 31 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>Continuar con Google</>}
         </button>
         <div style={{display:"flex",alignItems:"center",gap:8,margin:"4px 0"}}><div style={{flex:1,height:1,background:C.brd}}/><div style={{fontSize:11,color:C.muted}}>o</div><div style={{flex:1,height:1,background:C.brd}}/></div>
-        <button onClick={go} disabled={loading} style={{width:"100%",padding:"13px 16px",borderRadius:100,border:"none",background:C.ink,color:"#fff",fontSize:14,fontWeight:600,cursor:loading?"default":"pointer",fontFamily:"DM Sans,sans-serif"}}>Continuar con email</button>
+        <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"none",background:C.ink,color:"#fff",fontSize:14,fontWeight:600,cursor:loading?"default":"pointer",fontFamily:"DM Sans,sans-serif"}}>Continuar con email</button>
       </div>
-      <div style={{fontSize:11,color:C.muted,marginTop:24,maxWidth:260,lineHeight:1.5,animation:"fadeUp .6s ease .6s both"}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
+      <div style={{fontSize:11,color:C.muted,marginTop:24,maxWidth:280,lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
+    </div>
+  );
+  if(isD) return(
+    <div style={{width:"100vw",height:"100vh",display:"flex",background:"radial-gradient(ellipse at 40% 40%,#2A1880 0%,#0E0828 100%)"}}>
+      {/* Izquierda — personaje + tagline */}
+      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:24,padding:48}}>
+        <div style={{animationName:"pgBob",animationDuration:"3.6s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite"}}>
+          <Personaje size={260} color="lav" mood="idle"/>
+        </div>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontSize:28,fontWeight:800,color:"#fff",letterSpacing:-1,marginBottom:10}}>Marketing inmobiliario<br/>que realmente funciona.</div>
+          <div style={{fontSize:15,color:"rgba(255,255,255,.45)",lineHeight:1.7}}>Ideas, captions, análisis de competencia<br/>y pipeline de ventas — todo en un lugar.</div>
+        </div>
+        <div style={{display:"flex",gap:32,marginTop:8}}>
+          {[["2min","por día"],["10x","más leads"],["100%","argento"]].map(([n,l])=>(
+            <div key={n} style={{textAlign:"center"}}>
+              <div style={{fontSize:22,fontWeight:800,color:C.lime}}>{n}</div>
+              <div style={{fontSize:11,color:"rgba(255,255,255,.4)",marginTop:2}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Derecha — formulario */}
+      <div style={{width:480,display:"flex",alignItems:"center",justifyContent:"center",padding:48,background:"rgba(255,255,255,.04)",backdropFilter:"blur(20px)",borderLeft:"1px solid rgba(255,255,255,.08)"}}>
+        {form}
+      </div>
+    </div>
+  );
+  return(
+    <div style={{height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,background:C.bg,textAlign:"center"}}>
+      {form}
     </div>
   );
 };
@@ -2173,11 +2209,12 @@ const Login=({onDone})=>{
 // ── PLAN ──────────────────────────────────────────────────────────────────────────
 const Plan=({role,onDone})=>{
   const [agentes,setAgentes]=useState(3);
+  const isD=window.innerWidth>=768;
   const isManager=role==="inmobiliaria";
   const total=isManager?18+agentes*18:20;
   return(
-    <div style={{height:"100%",overflowY:"auto",padding:"28px 20px",background:C.bg}}>
-      <div style={{maxWidth:380,margin:"0 auto",display:"flex",flexDirection:"column",gap:18}}>
+    <div style={{minHeight:"100vh",overflowY:"auto",padding:isD?"40px 20px":"28px 20px",background:isD?"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)":"transparent",display:isD?"flex":undefined,alignItems:isD?"flex-start":undefined,justifyContent:isD?"center":undefined}}>
+      <div style={{maxWidth:isD?520:380,width:"100%",margin:"0 auto",display:"flex",flexDirection:"column",gap:18,background:isD?"rgba(255,255,255,.97)":C.bg,borderRadius:isD?24:0,padding:isD?"40px 48px":"0",boxShadow:isD?"0 24px 80px rgba(0,0,0,.25)":undefined}}>
         <div style={{textAlign:"center",marginBottom:6}}>
           <div style={{display:"flex",justifyContent:"center",marginBottom:10}}><Personaje size={100} color="lav" mood="thinking"/></div>
           <div style={{fontSize:24,fontWeight:700,letterSpacing:-1,color:C.ink}}>{isManager?"Plan Manager":"Plan Agente"}</div>
