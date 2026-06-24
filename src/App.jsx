@@ -466,8 +466,8 @@ const Onboarding=({onDone})=>{
   const isD=window.innerWidth>=768;
 
   return(
-    <div style={{minHeight:"100vh",overflowY:"auto",padding:isD?"40px 20px":"24px 20px",background:isD?"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)":"transparent",fontFamily:"DM Sans,sans-serif",display:isD?"flex":undefined,alignItems:isD?"flex-start":undefined,justifyContent:isD?"center":undefined}}>
-      <div style={{width:"100%",maxWidth:isD?560:420,margin:"0 auto",background:isD?"rgba(255,255,255,.97)":"transparent",borderRadius:isD?24:0,padding:isD?"40px 48px":"0",boxShadow:isD?"0 24px 80px rgba(0,0,0,.25)":undefined}}>
+    <div style={{minHeight:"100vh",overflowY:"auto",background:isD?"#fff":C.bg,fontFamily:"DM Sans,sans-serif",display:"flex",alignItems:"flex-start",justifyContent:"center",padding:isD?"48px 24px":"24px 20px"}}>
+      <div style={{width:"100%",maxWidth:520}}>
         <div style={{display:"flex",gap:5,marginBottom:28}}>
           {Array.from({length:totalSteps},(_,i)=>i+1).map(p=><div key={p} style={{height:4,borderRadius:4,background:p<step?C.lav3:p===step?C.lav:C.brd,flex:p===step?2:1,transition:"all .4s"}}/>)}
         </div>
@@ -2174,37 +2174,18 @@ const Login=({onDone})=>{
     </div>
   );
   if(isD) return(
-    <div style={{width:"100vw",height:"100vh",display:"grid",gridTemplateColumns:"1fr 1fr",background:"radial-gradient(ellipse at 60% 40%,#2A1880 0%,#0E0828 100%)"}}>
-      {/* Izquierda — fondo blanco full */}
-      <div style={{background:"#fff",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"0 80px",height:"100vh"}}>
-        <LogoFixa height={28}/>
-        <div style={{fontSize:15,color:C.mid,marginBottom:40,marginTop:12,textAlign:"center",lineHeight:1.6}}>Tu estrategia de marketing inmobiliario,<br/>en 2 minutos al día.</div>
+    <div style={{width:"100vw",height:"100vh",background:"#fff",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div style={{width:"100%",maxWidth:400,display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",padding:"0 24px"}}>
+        <LogoFixa height={32}/>
+        <div style={{fontSize:15,color:C.mid,marginTop:12,marginBottom:40,lineHeight:1.6}}>Tu estrategia de marketing inmobiliario,<br/>en 2 minutos al día.</div>
         <div style={{width:"100%",display:"flex",flexDirection:"column",gap:12}}>
-          <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"2px solid "+C.brd,background:C.sf,display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>
+          <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"2px solid "+C.brd,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:"pointer",fontFamily:"DM Sans,sans-serif",transition:"border-color .2s"}}>
             {loading?<Dots/>:<><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4c-7.5 0-13.9 4.3-17.1 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.3-1.8 13.7-5l-6.3-5.3C29.5 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4 5.7l6.3 5.3C40.9 36.9 44 31 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>Continuar con Google</>}
           </button>
           <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{flex:1,height:1,background:C.brd}}/><div style={{fontSize:11,color:C.muted}}>o</div><div style={{flex:1,height:1,background:C.brd}}/></div>
           <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px",borderRadius:100,border:"none",background:C.ink,color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>Continuar con email</button>
         </div>
-        <div style={{fontSize:11,color:C.muted,marginTop:24,textAlign:"center",lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
-      </div>
-      {/* Derecha — personaje + tagline */}
-      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:28,padding:48}}>
-        <div style={{animationName:"pgBob",animationDuration:"3.6s",animationTimingFunction:"ease-in-out",animationIterationCount:"infinite"}}>
-          <Personaje size={240} color="lav" mood="idle"/>
-        </div>
-        <div style={{textAlign:"center"}}>
-          <div style={{fontSize:30,fontWeight:800,color:"#fff",letterSpacing:-1,lineHeight:1.2,marginBottom:12}}>Marketing inmobiliario<br/>que realmente funciona.</div>
-          <div style={{fontSize:15,color:"rgba(255,255,255,.45)",lineHeight:1.7}}>Ideas, captions, análisis de competencia<br/>y pipeline de ventas — todo en un lugar.</div>
-        </div>
-        <div style={{display:"flex",gap:40}}>
-          {[["2min","por día"],["10x","más leads"],["100%","argento"]].map(([n,l])=>(
-            <div key={n} style={{textAlign:"center"}}>
-              <div style={{fontSize:24,fontWeight:800,color:C.lime}}>{n}</div>
-              <div style={{fontSize:12,color:"rgba(255,255,255,.4)",marginTop:3}}>{l}</div>
-            </div>
-          ))}
-        </div>
+        <div style={{fontSize:11,color:C.muted,marginTop:28,lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
       </div>
     </div>
   );
@@ -2222,8 +2203,8 @@ const Plan=({role,onDone})=>{
   const isManager=role==="inmobiliaria";
   const total=isManager?18+agentes*18:20;
   return(
-    <div style={{minHeight:"100vh",overflowY:"auto",padding:isD?"40px 20px":"28px 20px",background:isD?"radial-gradient(ellipse at 40% 20%,#1E1248 0%,#0D0920 100%)":"transparent",display:isD?"flex":undefined,alignItems:isD?"flex-start":undefined,justifyContent:isD?"center":undefined}}>
-      <div style={{maxWidth:isD?520:380,width:"100%",margin:"0 auto",display:"flex",flexDirection:"column",gap:18,background:isD?"rgba(255,255,255,.97)":C.bg,borderRadius:isD?24:0,padding:isD?"40px 48px":"0",boxShadow:isD?"0 24px 80px rgba(0,0,0,.25)":undefined}}>
+    <div style={{minHeight:"100vh",overflowY:"auto",padding:isD?"48px 24px":"28px 20px",background:isD?"#fff":C.bg,display:"flex",alignItems:"flex-start",justifyContent:"center"}}>
+      <div style={{maxWidth:isD?480:380,width:"100%",display:"flex",flexDirection:"column",gap:18}}>
         <div style={{textAlign:"center",marginBottom:6}}>
           <div style={{display:"flex",justifyContent:"center",marginBottom:10}}><Personaje size={100} color="lav" mood="thinking"/></div>
           <div style={{fontSize:24,fontWeight:700,letterSpacing:-1,color:C.ink}}>{isManager?"Plan Manager":"Plan Agente"}</div>
@@ -2432,9 +2413,9 @@ export default function Fixa(){
   );
 
   return(
-    <div style={{width:"100%",height:"100vh",background:"radial-gradient(circle at 30% 20%,#241B4D 0%,#15102E 55%,#0D0920 100%)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+    <div style={{width:"100%",height:"100vh",background:isDesktop?"transparent":"radial-gradient(circle at 30% 20%,#241B4D 0%,#15102E 55%,#0D0920 100%)",display:isDesktop?"block":"flex",alignItems:"center",justifyContent:"center"}}>
       <style>{`html,body,#root{margin:0;padding:0;width:100%;height:100%;}`}</style>
-      <div style={{width:"100%",height:"100vh",maxHeight:isDesktop?undefined:932,background:isDesktop?"transparent":C.bg,position:"relative",overflow:isDesktop?"visible":"hidden",fontFamily:"DM Sans,sans-serif",maxWidth:isDesktop?undefined:430,boxShadow:isDesktop?"none":"0 30px 90px rgba(0,0,0,.45)",borderRadius:0,display:isDesktop?"flex":undefined,alignItems:isDesktop?"center":undefined,justifyContent:isDesktop?"center":undefined}}>
+      <div style={{width:"100%",height:"100vh",maxHeight:isDesktop?undefined:932,background:isDesktop?"transparent":C.bg,position:"relative",overflow:isDesktop?"visible":"hidden",fontFamily:"DM Sans,sans-serif",maxWidth:isDesktop?undefined:430,boxShadow:isDesktop?"none":"0 30px 90px rgba(0,0,0,.45)",borderRadius:0}}>
       <style>{css}</style>
 
       <AchievementToast a={ach}/>
