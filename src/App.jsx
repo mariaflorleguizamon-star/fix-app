@@ -17,6 +17,7 @@ const css=`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wg
 @keyframes scanLn{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:1}100%{top:100%;opacity:0}}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes dotB{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
 @keyframes chatIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes floatBtn{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.04)}}
 @keyframes ripple{0%{transform:scale(0.8);opacity:1}100%{transform:scale(2.4);opacity:0}}
@@ -349,9 +350,10 @@ function Chatbot({ud,onClose}){
     },1200+Math.random()*800);
   };
 
+  const isD = window.innerWidth >= 768;
   return(
-    <div style={{position:"fixed",inset:0,zIndex:500,display:"flex",flexDirection:"column",background:"rgba(10,6,30,.7)",backdropFilter:"blur(8px)"}} onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
-      <div style={{position:"absolute",bottom:0,left:0,right:0,height:"82%",background:C.sf,borderRadius:"28px 28px 0 0",display:"flex",flexDirection:"column",overflow:"hidden",animation:"chatIn .35s cubic-bezier(.34,1.2,.64,1) both",border:"1px solid "+C.brd}}>
+    <div style={{position:"fixed",inset:0,zIndex:500,display:"flex",flexDirection:"column",background:isD?"transparent":"rgba(10,6,30,.7)",backdropFilter:isD?"none":"blur(8px)"}} onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div style={isD?{position:"absolute",top:0,right:0,bottom:0,width:400,background:C.sf,display:"flex",flexDirection:"column",overflow:"hidden",animation:"slideInRight .3s cubic-bezier(.34,1.2,.64,1) both",boxShadow:"-8px 0 32px rgba(0,0,0,.15)",borderLeft:"1px solid "+C.brd}:{position:"absolute",bottom:0,left:0,right:0,height:"82%",background:C.sf,borderRadius:"28px 28px 0 0",display:"flex",flexDirection:"column",overflow:"hidden",animation:"chatIn .35s cubic-bezier(.34,1.2,.64,1) both",border:"1px solid "+C.brd}}>
           {/* Header — fondo blanco, personaje lav quieto */}
           <div style={{padding:"16px 20px 12px",borderBottom:"1.5px solid "+C.brd,display:"flex",alignItems:"center",gap:12,flexShrink:0}}>
             <div style={{width:42,height:42,borderRadius:"50%",background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,boxShadow:"0 2px 8px rgba(91,74,196,.2)"}}>
@@ -759,7 +761,7 @@ function PanelDash({ud,toast,setPanel,streak,fireAch}){
   );
 }
 
-function PanelHoy({ud,toast,markPublished}){
+function PanelHoy({ud,toast,markPublished,isDesktop=false}){
   const [load,setLoad]=useState(false);
   return(
     <div style={{display:"flex",flexDirection:"column",gap:18,animation:"panelIn .4s cubic-bezier(.4,0,.2,1) both"}}>
@@ -1022,7 +1024,7 @@ function PanelCal({toast,published,fireAch}){
   );
 }
 
-function PanelComp({ud,toast,fireAch}){
+function PanelComp({ud,toast,fireAch,isDesktop=false}){
   const [tab,setTab]=useState("perfiles");
   const [adsState,setAdsState]=useState({0:true,1:true,2:false});
   const toggleAd=(i)=>{
@@ -1033,7 +1035,7 @@ function PanelComp({ud,toast,fireAch}){
     <div style={{display:"flex",flexDirection:"column",gap:16,animation:"panelIn .4s cubic-bezier(.4,0,.2,1) both"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <div>
-          <div style={{fontSize:22,fontWeight:800,letterSpacing:-1,color:C.ink,lineHeight:1}}>Competencia</div>
+          {!isDesktop&&<div style={{fontSize:22,fontWeight:800,letterSpacing:-1,color:C.ink,lineHeight:1}}>Competencia</div>}
           <div style={{fontSize:13,color:C.mid,marginTop:3,fontWeight:500}}>{ud.zona} · hace 3h</div>
         </div>
         <Btn v="lav" sm onClick={()=>{toast("Re-escaneando zona...");}}>Escanear</Btn>
@@ -1144,7 +1146,7 @@ function PanelComp({ud,toast,fireAch}){
   );
 }
 
-function PanelReservas({toast,fireAch,ud,isManager,setPanel}){
+function PanelReservas({toast,fireAch,ud,isManager,setPanel,hideTitle=false}){
   const stages=["Contacto","Visita","Reserva","Venta","Escritura"];
   const stageColor={Contacto:C.sky,Visita:C.lav3,Reserva:C.amber,Venta:C.lime3,Escritura:C.green};
   const [cols,setCols]=useState([
@@ -1213,13 +1215,13 @@ function PanelReservas({toast,fireAch,ud,isManager,setPanel}){
   const totalComisionInmo=cols.find(c=>c.col==="Escritura")?.cards.reduce((a,c)=>a+(parseInt(c.comisionInmo)||0),0)||0;
   return(
     <div style={{display:"flex",flexDirection:"column",gap:18,animation:"panelIn .4s cubic-bezier(.4,0,.2,1) both",position:"relative"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+      {!hideTitle&&<div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
         <div>
-          <div style={{fontSize:22,fontWeight:800,letterSpacing:-1,color:C.ink,lineHeight:1}}>Reservas</div>
-          <div style={{fontSize:13,color:C.mid,marginTop:3,fontWeight:500}}>Tu pipeline personal</div>
+          <div style={{fontSize:22,fontWeight:800,letterSpacing:-1,color:C.ink,lineHeight:1}}>Propiedades</div>
+          <div style={{fontSize:13,color:C.mid,marginTop:3,fontWeight:500}}>Tu pipeline de ventas</div>
         </div>
         <Btn v="lav" sm onClick={openModal}>+ Nueva</Btn>
-      </div>
+      </div>}
       {isManager&&<div onClick={()=>setPanel("reservasEquipo")} style={{display:"flex",alignItems:"center",justifyContent:"space-between",background:C.lav4,border:"1.5px solid "+C.lav2,borderRadius:18,padding:"13px 16px",cursor:"pointer"}}>
         <div style={{fontSize:13,fontWeight:700,color:C.lav3}}>Ver el pipeline de todo el equipo →</div>
       </div>}
@@ -1426,7 +1428,7 @@ function PanelReservasEquipo({toast,setPanel}){
     <div style={{display:"flex",flexDirection:"column",gap:16,animation:"panelIn .4s cubic-bezier(.4,0,.2,1) both"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <div onClick={()=>setPanel("reservas")} style={{cursor:"pointer",fontSize:18,color:C.mid}}>←</div>
-        <div><div style={{fontSize:17,fontWeight:700,letterSpacing:-0.5,color:C.ink}}>Reservas del equipo</div><div style={{fontSize:12,color:C.mid}}>Todas las operaciones de tus agentes</div></div>
+        <div><div style={{fontSize:17,fontWeight:700,letterSpacing:-0.5,color:C.ink}}>Propiedades del equipo</div><div style={{fontSize:12,color:C.mid}}>Todas las operaciones de tus agentes</div></div>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
         <Stat ic="📋" val={String(data.length)} lbl="Operaciones totales" c={C.lav3}/>
@@ -1488,7 +1490,7 @@ function PanelReservasEquipo({toast,setPanel}){
   );
 }
 
-function PanelGuion({ud,toast,fireAch}){
+function PanelGuion({ud,toast,fireAch,isDesktop=false}){
   const [load,setLoad]=useState(false);
   const nombre = ud.nombre.split(" ")[0];
   const zona = ud.zona;
@@ -1586,7 +1588,7 @@ function PanelGuion({ud,toast,fireAch}){
   );
 }
 
-function PanelEditor({toast}){
+function PanelEditor({toast,isDesktop=false}){
   const [sel,setSel]=useState(0);
   const [editing,setEditing]=useState(false);
   const [custom,setCustom]=useState({});
@@ -1620,7 +1622,7 @@ function PanelEditor({toast}){
     <div style={{display:"flex",flexDirection:"column",gap:14,animation:"panelIn .4s cubic-bezier(.4,0,.2,1) both"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <div>
-          <div style={{fontSize:17,fontWeight:700,letterSpacing:-0.5,color:C.ink}}>Editor de diseño</div>
+          {!isDesktop&&<div style={{fontSize:17,fontWeight:700,letterSpacing:-0.5,color:C.ink}}>Editor de diseño</div>}
           <div style={{fontSize:12,color:C.mid}}>Plantillas listas · editá y publicá</div>
         </div>
         <Btn v="ghost" sm onClick={()=>fileRef.current?.click()}>📎 Tu logo</Btn>
@@ -1741,7 +1743,7 @@ function PanelBot({ud,toast}){
   );
 }
 
-function PanelBiblioteca({ud, toast}){
+function PanelBiblioteca({ud, toast, isDesktop=false}){
   const [filtroTipo, setFiltroTipo] = useState("todos");
   const [filtroZona, setFiltroZona] = useState("todos");
   const [busqueda, setBusqueda] = useState("");
@@ -1839,7 +1841,7 @@ function PanelBiblioteca({ud, toast}){
       {/* Header */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
         <div>
-          <div style={{fontSize:22,fontWeight:800,letterSpacing:-1,color:C.ink,lineHeight:1}}>Biblioteca de Ads</div>
+          {!isDesktop&&<div style={{fontSize:22,fontWeight:800,letterSpacing:-1,color:C.ink,lineHeight:1}}>Biblioteca de Ads</div>}
           <div style={{fontSize:13,color:C.mid,marginTop:3}}>Meta Ads Library · Real estate {ud.zona}</div>
         </div>
         <div style={{fontSize:9,fontWeight:800,padding:"5px 10px",borderRadius:100,background:C.skyd,color:C.skyk,border:"1.5px solid "+C.skyk+"30"}}>LIVE</div>
@@ -2153,45 +2155,36 @@ function PanelPerfil({ud,setUd,toast,onLogout,isManager}){
   );
 }
 
-// ── LOGIN ─────────────────────────────────────────────────────────────────────────
 const Login=({onDone})=>{
   const [loading,setLoading]=useState(false);
   const isD=window.innerWidth>=768;
   const go=()=>{setLoading(true);setTimeout(()=>onDone(),1100);};
-  const form=(
-    <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:isD?"48px 56px":"40px",background:isD?"rgba(255,255,255,.97)":"transparent",borderRadius:isD?24:0,boxShadow:isD?"0 20px 60px rgba(0,0,0,.12)":undefined,width:isD?"100%":undefined,maxWidth:isD?420:undefined,textAlign:"center"}}>
-      {!isD&&<div style={{marginBottom:14,display:"flex",justifyContent:"center"}}><Personaje size={140} color="lav" mood="idle"/></div>}
-      <div style={{display:"flex",justifyContent:"center",marginBottom:10}}><LogoFixa height={isD?32:30}/></div>
-      <div style={{fontSize:isD?16:14,color:C.mid,marginBottom:38,maxWidth:280,lineHeight:1.6}}>Tu estrategia de marketing inmobiliario, en 2 minutos al día.</div>
-      <div style={{width:"100%",maxWidth:320,display:"flex",flexDirection:"column",gap:10}}>
-        <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"2px solid "+C.brd,background:C.sf,display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:loading?"default":"pointer",fontFamily:"DM Sans,sans-serif"}}>
-          {loading?<Dots/>:<><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4c-7.5 0-13.9 4.3-17.1 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.3-1.8 13.7-5l-6.3-5.3C29.5 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4 5.7l6.3 5.3C40.9 36.9 44 31 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>Continuar con Google</>}
-        </button>
-        <div style={{display:"flex",alignItems:"center",gap:8,margin:"4px 0"}}><div style={{flex:1,height:1,background:C.brd}}/><div style={{fontSize:11,color:C.muted}}>o</div><div style={{flex:1,height:1,background:C.brd}}/></div>
-        <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"none",background:C.ink,color:"#fff",fontSize:14,fontWeight:600,cursor:loading?"default":"pointer",fontFamily:"DM Sans,sans-serif"}}>Continuar con email</button>
-      </div>
-      <div style={{fontSize:11,color:C.muted,marginTop:24,maxWidth:280,lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
+  const buttons=(
+    <div style={{width:"100%",display:"flex",flexDirection:"column",gap:12}}>
+      <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"2px solid "+C.brd,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>
+        {loading?<Dots/>:<><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4c-7.5 0-13.9 4.3-17.1 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.3-1.8 13.7-5l-6.3-5.3C29.5 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4 5.7l6.3 5.3C40.9 36.9 44 31 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>Continuar con Google</>}
+      </button>
+      <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{flex:1,height:1,background:C.brd}}/><span style={{fontSize:11,color:C.muted}}>o</span><div style={{flex:1,height:1,background:C.brd}}/></div>
+      <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px",borderRadius:100,border:"none",background:C.ink,color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>Continuar con email</button>
     </div>
   );
   if(isD) return(
-    <div style={{width:"100vw",height:"100vh",background:"#fff",display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <div style={{width:"100%",maxWidth:400,display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",padding:"0 24px"}}>
-        <LogoFixa height={32}/>
-        <div style={{fontSize:15,color:C.mid,marginTop:12,marginBottom:40,lineHeight:1.6}}>Tu estrategia de marketing inmobiliario,<br/>en 2 minutos al día.</div>
-        <div style={{width:"100%",display:"flex",flexDirection:"column",gap:12}}>
-          <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px 16px",borderRadius:100,border:"2px solid "+C.brd,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",gap:10,fontSize:14,fontWeight:600,color:C.ink,cursor:"pointer",fontFamily:"DM Sans,sans-serif",transition:"border-color .2s"}}>
-            {loading?<Dots/>:<><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.6 4 24 4c-7.5 0-13.9 4.3-17.1 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.3-1.8 13.7-5l-6.3-5.3C29.5 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4 5.7l6.3 5.3C40.9 36.9 44 31 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>Continuar con Google</>}
-          </button>
-          <div style={{display:"flex",alignItems:"center",gap:8}}><div style={{flex:1,height:1,background:C.brd}}/><div style={{fontSize:11,color:C.muted}}>o</div><div style={{flex:1,height:1,background:C.brd}}/></div>
-          <button onClick={go} disabled={loading} style={{width:"100%",padding:"14px",borderRadius:100,border:"none",background:C.ink,color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>Continuar con email</button>
-        </div>
-        <div style={{fontSize:11,color:C.muted,marginTop:28,lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
+    <div style={{position:"fixed",inset:0,zIndex:100,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div style={{width:380,display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",gap:0}}>
+        <LogoFixa height={30}/>
+        <div style={{fontSize:14,color:C.mid,margin:"12px 0 36px",lineHeight:1.6}}>Tu estrategia de marketing inmobiliario,<br/>en 2 minutos al día.</div>
+        {buttons}
+        <div style={{fontSize:11,color:C.muted,marginTop:24,lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
       </div>
     </div>
   );
   return(
     <div style={{height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,background:C.bg,textAlign:"center"}}>
-      {form}
+      <div style={{marginBottom:14,display:"flex",justifyContent:"center"}}><Personaje size={140} color="lav" mood="idle"/></div>
+      <div style={{display:"flex",justifyContent:"center",marginBottom:10}}><LogoFixa height={28}/></div>
+      <div style={{fontSize:14,color:C.mid,marginBottom:36,maxWidth:260,lineHeight:1.6}}>Tu estrategia de marketing inmobiliario, en 2 minutos al día.</div>
+      {buttons}
+      <div style={{fontSize:11,color:C.muted,marginTop:20,maxWidth:260,lineHeight:1.5}}>Al continuar aceptás nuestros Términos y Política de Privacidad.</div>
     </div>
   );
 };
@@ -2281,7 +2274,7 @@ export default function Fixa(){
     {id:"ideas",lbl:"Ideas",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.2 1.2 4.1 3 5.2V15h6v-1.8c1.8-1.1 3-3 3-5.2 0-3.3-2.7-6-6-6Z"/><path d="M9 17h6M10.5 20h3"/></svg>,agentOnly:true},
     {id:"cal",lbl:"Calendario",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>,agentOnly:true},
     {id:"comp",lbl:"Competencia",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 20h3V10H2zM19 20h3V4h-3zM10 20h4V7h-4z"/></svg>},
-    {id:"reservas",lbl:"Reservas",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 10L12 3L21 10V20H15V14H9V20H3V10Z"/></svg>},
+    {id:"reservas",lbl:"Propiedades",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>},
     {id:"editor",lbl:"Diseño",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 9h18M9 9v12"/></svg>,agentOnly:true},
     {id:"guión",lbl:"Guión",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3H7a2 2 0 0 0-2 2v16l7-3 7 3V5a2 2 0 0 0-2-2z"/></svg>,agentOnly:true},
     {id:"auto",lbl:"Bot",ic:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,pro:true,agentOnly:true},
@@ -2319,7 +2312,7 @@ export default function Fixa(){
       {/* BODY */}
       <div style={{flex:1,display:"grid",gridTemplateColumns:"220px 1fr 280px",overflow:"hidden"}}>
         {/* SIDEBAR */}
-        <div style={{background:"rgba(255,255,255,.55)",backdropFilter:"blur(20px)",borderRight:"1px solid "+C.brd,padding:"16px 10px",display:"flex",flexDirection:"column",gap:2,overflowY:"auto"}}>
+        <div style={{background:C.sf,borderRight:"1px solid "+C.brd,padding:"16px 10px",display:"flex",flexDirection:"column",gap:2,overflowY:"auto"}}>
           <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 12px",marginBottom:8,background:C.lav4,borderRadius:14}}>
             <Personaje size={34} color="lav" mood="eyes"/>
             <div><div style={{fontSize:11,fontWeight:700,color:C.lav3}}>fixa. assistant</div><div style={{fontSize:10,color:C.mid}}>Siempre disponible</div></div>
@@ -2340,50 +2333,50 @@ export default function Fixa(){
           </div>
         </div>
         {/* CONTENT */}
-        <div style={{overflowY:"auto",padding:"28px 32px",background:C.bg}}>
+        <div style={{overflowY:"auto",padding:"28px 32px",background:"#F2EEF8"}}>
           <div style={{marginBottom:22}}>
-            <div style={{fontSize:26,fontWeight:800,letterSpacing:-0.8,color:C.ink}}>{{"dash":"Inicio","hoy":"Publicar hoy","ideas":"Ideas del mes","cal":"Calendario","comp":"Competencia","reservas":"Reservas","editor":"Diseño","guión":"Guión de reel","auto":"Bot Pro","alertas":"Alertas","biblioteca":"Biblioteca de Ads","empresa":"Equipo","perfil":"Mi perfil"}[panel]||panel}</div>
-            <div style={{fontSize:13,color:C.mid,marginTop:4}}>{{"dash":"Tu resumen de hoy","hoy":"Mejor horario: 18-19hs","ideas":"Junio · Para "+ud.zona,"comp":ud.zona+" · Actualizado hace 3h","reservas":"Tu pipeline personal","biblioteca":"Meta Ads Library · Real estate","editor":"Plantillas editables"}[panel]||""}</div>
+            <div style={{fontSize:26,fontWeight:800,letterSpacing:-0.8,color:C.ink,lineHeight:1}}>{{"dash":"Inicio","hoy":"Publicar hoy","ideas":"Ideas del mes","cal":"Calendario","comp":"Competencia","reservas":"Propiedades","editor":"Diseño","guión":"Guión de reel","auto":"Bot Pro","alertas":"Alertas","biblioteca":"Biblioteca de Ads","empresa":"Equipo","perfil":"Mi perfil"}[panel]||panel}</div>
+            <div style={{fontSize:13,color:C.mid,marginTop:5}}>{{"dash":"Tu resumen de hoy","hoy":"Mejor horario: 18-19hs","ideas":"Junio · Para "+ud.zona,"comp":ud.zona+" · Actualizado hace 3h","reservas":"Tu pipeline de ventas","biblioteca":"Meta Ads Library · Real estate","editor":"Plantillas editables"}[panel]||""}</div>
           </div>
           {panel==="dash"&&<PanelDash ud={ud} toast={showToast} setPanel={changePanel} streak={streak} fireAch={fireAch}/>}
-          {panel==="hoy"&&<PanelHoy ud={ud} toast={showToast} markPublished={markPublished}/>}
+          {panel==="hoy"&&<PanelHoy ud={ud} toast={showToast} markPublished={markPublished} isDesktop={true}/>}
           {panel==="ideas"&&<PanelIdeas ud={ud} toast={showToast} setPanel={changePanel}/>}
           {panel==="cal"&&<PanelCal toast={showToast} published={published} fireAch={fireAch}/>}
-          {panel==="comp"&&<PanelComp ud={ud} toast={showToast} fireAch={fireAch}/>}
-          {panel==="reservas"&&<PanelReservas toast={showToast} fireAch={fireAch} ud={ud} isManager={isManager} setPanel={changePanel}/>}
-          {panel==="editor"&&<PanelEditor toast={showToast}/>}
-          {panel==="guión"&&<PanelGuion ud={ud} toast={showToast} fireAch={fireAch}/>}
+          {panel==="comp"&&<PanelComp ud={ud} toast={showToast} fireAch={fireAch} isDesktop={true}/>}
+          {panel==="reservas"&&<PanelReservas toast={showToast} fireAch={fireAch} ud={ud} isManager={isManager} setPanel={changePanel} hideTitle={true}/>}
+          {panel==="editor"&&<PanelEditor toast={showToast} isDesktop={true}/>}
+          {panel==="guión"&&<PanelGuion ud={ud} toast={showToast} fireAch={fireAch} isDesktop={true}/>}
           {panel==="auto"&&<PanelBot ud={ud} toast={showToast}/>}
           {panel==="alertas"&&<PanelAlertas toast={showToast} setPanel={changePanel}/>}
-          {panel==="biblioteca"&&<PanelBiblioteca ud={ud} toast={showToast}/>}
+          {panel==="biblioteca"&&<PanelBiblioteca ud={ud} toast={showToast} isDesktop={true}/>}
           {panel==="empresa"&&<PanelEmpresa toast={showToast}/>}
           {panel==="perfil"&&<PanelPerfil ud={ud} setUd={setUd} toast={showToast} onLogout={()=>setScreen("login")} isManager={isManager}/>}
         </div>
         {/* RIGHT PANEL */}
-        <div style={{background:"rgba(255,255,255,.45)",backdropFilter:"blur(20px)",borderLeft:"1px solid "+C.brd,padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
-          <div style={{background:C.sf,borderRadius:16,padding:"16px",border:"1px solid "+C.brd}}>
+        <div style={{background:C.sf,borderLeft:"1px solid "+C.brd,padding:"20px 16px",overflowY:"auto",display:"flex",flexDirection:"column",gap:12}}>
+          <div style={{background:C.s2,borderRadius:16,padding:"16px",border:"1px solid "+C.brd}}>
             <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
-              <div style={{width:42,height:42,borderRadius:"50%",background:"linear-gradient(135deg,#3D2AAF,#6B5DD3)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontWeight:800,fontSize:17}}>{ud.nombre?ud.nombre[0].toUpperCase():"U"}</span></div>
+              <div style={{width:42,height:42,borderRadius:"50%",background:"linear-gradient(135deg,#3D2AAF,#6B5DD3)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{color:"#fff",fontWeight:800,fontSize:17}}>{ud.nombre?ud.nombre[0].toUpperCase():"U"}</span></div>
               <div><div style={{fontSize:13,fontWeight:700,color:C.ink}}>{ud.nombre}</div><div style={{fontSize:11,color:C.mid}}>{ud.ig} · {ud.zona}</div></div>
             </div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>
-              {[[streak+"🔥",C.amber,C.sund],["Trial",C.lav3,C.lav4],["Pro",C.green,C.greend]].map(([v,c,bg])=>(
+              {[[streak+"","🔥",C.amber,C.sund],["Trial","📅",C.lav3,C.lav4],["Pro","⭐",C.green,C.greend]].map(([v,ic,c,bg])=>(
                 <div key={v} style={{background:bg,borderRadius:10,padding:"8px 6px",textAlign:"center"}}>
-                  <div style={{fontSize:13,fontWeight:800,color:c}}>{v}</div>
+                  <div style={{fontSize:16,fontWeight:800,color:c}}>{v}{ic}</div>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{background:C.peachd,borderRadius:14,padding:"13px 14px",border:"1px solid rgba(176,88,32,.15)"}}>
+          <div style={{background:C.peachd,borderRadius:14,padding:"13px 14px",border:"1.5px solid rgba(176,88,32,.2)"}}>
             <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.peachk,marginBottom:6}}>⚠️ Alerta</div>
             <div style={{fontSize:12,color:C.mid,lineHeight:1.55}}><strong style={{color:C.peachk}}>@propiedades.palermo</strong> publicó 3 reels. Engagement +41%.</div>
             <div onClick={()=>changePanel("comp")} style={{marginTop:8,fontSize:11,fontWeight:700,color:C.peachk,cursor:"pointer"}}>Ver análisis →</div>
           </div>
           <div style={{background:C.sf,borderRadius:14,padding:"14px",border:"1px solid "+C.brd,flex:1}}>
-            <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.muted,marginBottom:10}}>Próximos posts</div>
+            <div style={{fontSize:9,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.muted,marginBottom:12}}>Próximos posts</div>
             {[{d:"13 Jun",t:"Tour de la zona",tipo:"Reel",c:"#B04020",bg:C.redd},{d:"17 Jun",t:"Datos de barrio",tipo:"Post",c:C.lav3,bg:C.lav4},{d:"20 Jun",t:"Mitos escritura",tipo:"Reel",c:"#B04020",bg:C.redd}].map((p,i)=>(
-              <div key={i} style={{display:"flex",gap:8,alignItems:"center",padding:"8px 0",borderBottom:i<2?"1px solid "+C.brd:"none"}}>
-                <div style={{fontSize:10,color:C.muted,width:36}}>{p.d}</div>
+              <div key={i} style={{display:"flex",gap:8,alignItems:"center",padding:"9px 0",borderBottom:i<2?"1px solid "+C.brd:"none"}}>
+                <div style={{fontSize:9,color:C.muted,width:34,flexShrink:0}}>{p.d}</div>
                 <div style={{flex:1,fontSize:12,fontWeight:600,color:C.ink}}>{p.t}</div>
                 <div style={{fontSize:9,fontWeight:700,padding:"3px 7px",borderRadius:6,background:p.bg,color:p.c}}>{p.tipo}</div>
               </div>
